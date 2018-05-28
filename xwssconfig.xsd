@@ -1,0 +1,400 @@
+<?xml version="1.0"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://java.sun.com/xml/ns/xwss/config" targetNamespace="http://java.sun.com/xml/ns/xwss/config" elementFormDefault="qualified">
+	<xsd:element name="JAXRPCSecurity">
+		
+        <xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Service" type="Service_T" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element name="SecurityEnvironmentHandler" type="xsd:string" />
+			</xsd:sequence>
+		        <xsd:attribute name="optimize" type="xsd:boolean" use="optional" default="false" />
+                    <xsd:attribute name="retainSecurityHeader" type="xsd:boolean" use="optional" default="false" />
+                    <xsd:attribute name="resetMustUnderstand" type="xsd:boolean" use="optional" default="false" />
+		</xsd:complexType>
+    </xsd:element>
+	<xsd:complexType name="Service_T">
+		<xsd:sequence>
+			<xsd:element ref="SecurityConfiguration" minOccurs="0" />
+			<xsd:element name="Port" type="Port_T" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="SecurityEnvironmentHandler" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="optional" />
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="conformance" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="bsp" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="useCache" type="xsd:boolean" use="optional" default="false" />
+	</xsd:complexType>
+	<xsd:complexType name="Port_T" mixed="true">
+		<xsd:sequence>
+			<xsd:element ref="SecurityConfiguration" minOccurs="0" />
+			<xsd:element name="Operation" type="Operation_T" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="name" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="conformance" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="bsp" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="Operation_T">
+		<xsd:sequence>
+			<xsd:element ref="SecurityConfiguration" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="name" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:element name="SecurityConfiguration" type="SecurityConfiguration_T" />
+	<xsd:complexType name="SecurityConfiguration_T">
+		<xsd:sequence>
+			<xsd:group ref="SecurityConfigurationElements" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="dumpMessages" type="xsd:boolean" use="optional" default="false" />
+		<xsd:attribute name="enableDynamicPolicy" type="xsd:boolean" use="optional" default="false" />
+            <xsd:attribute name="retainSecurityHeader" type="xsd:boolean" use="optional" default="false" />
+            <xsd:attribute name="resetMustUnderstand" type="xsd:boolean" use="optional" default="false" />
+	</xsd:complexType>
+	<xsd:group name="SecurityConfigurationElements">
+		
+        <xsd:choice>
+			
+            <xsd:element name="Timestamp" type="Timestamp_T" minOccurs="0" />
+            
+            <xsd:element name="RequireTimestamp" type="RequireTimestamp_T" minOccurs="0" />
+            
+            <xsd:element name="UsernameToken" type="UsernameToken_T" minOccurs="0" />
+            
+            <xsd:element name="RequireUsernameToken" type="RequireUsernameToken_T" minOccurs="0" />
+            
+            <xsd:element name="SAMLAssertion" type="SAMLAssertion_T" minOccurs="0" />
+            
+            <xsd:element name="RequireSAMLAssertion" type="RequireSAMLAssertion_T" minOccurs="0" />
+            
+            <xsd:element name="OptionalTargets" type="OptionalTargets_T" minOccurs="0" />
+            
+            <xsd:element name="Sign" type="Sign_T" />
+            
+            <xsd:element name="Encrypt" type="Encrypt_T" />
+            
+            <xsd:element name="RequireSignature" type="RequireSignature_T" />
+            
+            <xsd:element name="RequireEncryption" type="RequireEncryption_T" />
+        </xsd:choice>
+    </xsd:group>
+	<xsd:complexType name="Timestamp_T">
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="timeout" type="xsd:decimal" use="optional" default="300" />
+	</xsd:complexType>
+	<xsd:complexType name="RequireTimestamp_T">
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="maxClockSkew" type="xsd:decimal" use="optional" default="60" />
+		<xsd:attribute name="timestampFreshnessLimit" type="xsd:decimal" use="optional" default="300" />
+	</xsd:complexType>
+	<xsd:complexType name="UsernameToken_T">
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="name" type="xsd:string" use="optional" />
+		<xsd:attribute name="password" type="xsd:string" use="optional" />
+		<xsd:attribute name="useNonce" type="xsd:boolean" use="optional" default="true" />
+		<xsd:attribute name="digestPassword" type="xsd:boolean" use="optional" default="true" />
+	</xsd:complexType>
+	<xsd:complexType name="RequireUsernameToken_T">
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="nonceRequired" type="xsd:boolean" use="optional" default="true" />
+		<xsd:attribute name="passwordDigestRequired" type="xsd:boolean" use="optional" default="true" />
+		<xsd:attribute name="maxClockSkew" type="xsd:decimal" use="optional" default="60" />
+		<xsd:attribute name="timestampFreshnessLimit" type="xsd:decimal" use="optional" default="300" />
+		<xsd:attribute name="maxNonceAge" type="xsd:decimal" use="optional" default="900" />
+	</xsd:complexType>
+	<xsd:complexType name="Encrypt_T">
+		<xsd:sequence minOccurs="0">
+			<xsd:choice minOccurs="0" maxOccurs="1">
+				<xsd:element name="X509Token" type="X509Token_T" />
+				<xsd:element name="SAMLAssertion" type="SAMLAssertion_T" />
+				<xsd:element name="SymmetricKey" type="SymmetricKey_T" />
+			</xsd:choice>
+			<xsd:element name="KeyEncryptionMethod" type="KeyEncryptionMethod_T" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="DataEncryptionMethod" type="DataEncryptionMethod_T" minOccurs="0" maxOccurs="1" />
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="Target" type="Target_T" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element name="EncryptionTarget" type="EncryptionTarget_T" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="id_T" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="KeyEncryptionMethod_T">
+		<xsd:attribute name="algorithm" use="optional" default="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" />
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#rsa-1_5" />
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#kw-tripledes" />
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#kw-aes128" />
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#kw-aes256" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="DataEncryptionMethod_T">
+		<xsd:attribute name="algorithm" use="optional" default="http://www.w3.org/2001/04/xmlenc#tripledes-cbc">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#aes128-cbc" />
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#aes256-cbc" />
+					<xsd:enumeration value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="EncryptionTarget_T">
+		<xsd:sequence>
+			<xsd:element name="Transform" type="Transform_T" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="type" type="xsd:string" use="optional" default="qname" />
+		<xsd:attribute name="contentOnly" type="xsd:boolean" use="optional" default="true" />
+		<xsd:attribute name="enforce" type="xsd:boolean" use="optional" default="true" />
+		<xsd:attribute name="value" type="xsd:string" use="required" />
+	</xsd:complexType>
+	<xsd:complexType name="SymmetricKey_T">
+		<xsd:attribute name="keyAlias" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="1" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="Sign_T">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="1">
+				<xsd:element name="X509Token" type="X509Token_T" />
+				<xsd:element name="SAMLAssertion" type="SAMLAssertion_T" />
+				<xsd:element name="SymmetricKey" type="SymmetricKey_T" />
+			</xsd:choice>
+			<xsd:element name="CanonicalizationMethod" type="CanonicalizationMethod_T" minOccurs="0" />
+			<xsd:element name="SignatureMethod" type="SignatureMethod_T" minOccurs="0" />
+			<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="Target" type="Target_T" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element name="SignatureTarget" type="SignatureTarget_T" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="includeTimestamp" type="xsd:boolean" use="optional" default="true" />
+	</xsd:complexType>
+	<xsd:complexType name="CanonicalizationMethod_T">
+		<xsd:attribute name="algorithm" type="xsd:string" use="optional" default="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                <xsd:attribute name="disableInclusivePrefix" type="xsd:boolean" use="optional" default="false" />
+	</xsd:complexType>
+	<xsd:complexType name="SignatureMethod_T">
+		<xsd:attribute name="algorithm" type="xsd:string" use="optional" default="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+	</xsd:complexType>
+	<xsd:complexType name="RequireSignature_T">
+		<xsd:sequence minOccurs="0" maxOccurs="1">
+			<xsd:choice minOccurs="0" maxOccurs="1">
+				<xsd:element name="X509Token" type="X509Token_T" />
+				<xsd:element name="SAMLAssertion" type="SAMLAssertion_T" />
+				<xsd:element name="SymmetricKey" type="SymmetricKey_T" />
+			</xsd:choice>
+			<xsd:element name="CanonicalizationMethod" type="CanonicalizationMethod_T" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="SignatureMethod" type="SignatureMethod_T" minOccurs="0" maxOccurs="1" />
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="Target" type="Target_T" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element name="SignatureTarget" type="SignatureTarget_T" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="requireTimestamp" type="xsd:boolean" use="optional" default="true" />
+	</xsd:complexType>
+	<xsd:complexType name="RequireEncryption_T">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="1">
+				<xsd:element name="X509Token" type="X509Token_T" />
+				<xsd:element name="SAMLAssertion" type="SAMLAssertion_T" />
+				<xsd:element name="SymmetricKey" type="SymmetricKey_T" />
+			</xsd:choice>
+			<xsd:element name="KeyEncryptionMethod" type="KeyEncryptionMethod_T" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="DataEncryptionMethod" type="DataEncryptionMethod_T" minOccurs="0" maxOccurs="1" />
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="Target" type="Target_T" />
+				<xsd:element name="EncryptionTarget" type="EncryptionTarget_T" />
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="id_T" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="OptionalTargets_T">
+		<xsd:choice minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="Target" type="Target_T" />
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="X509Token_T">
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="strId" type="id_T" use="optional" />
+		<xsd:attribute name="certificateAlias" type="xsd:string" use="optional" />
+		<xsd:attribute name="keyReferenceType" use="optional" default="Direct">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Direct" />
+					<xsd:enumeration value="Identifier" />
+					<xsd:enumeration value="IssuerSerialNumber" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="encodingType" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="valueType" type="xsd:string" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="SAMLAssertion_T">
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="authorityId" type="id_T" use="optional" />
+		<xsd:attribute name="strId" type="id_T" use="optional" />
+		<xsd:attribute name="keyIdentifier" type="id_T" use="optional" />
+		<xsd:attribute name="encodingType" use="prohibited" />
+		<xsd:attribute name="keyReferenceType" use="optional" default="Identifier">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Identifier" />
+					<xsd:enumeration value="Embedded" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="type" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="HOK" />
+					<xsd:enumeration value="SV" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="RequireSAMLAssertion_T">
+		<xsd:attribute name="id" type="id_T" use="optional" />
+		<xsd:attribute name="authorityId" type="id_T" use="optional" />
+		<xsd:attribute name="strId" type="id_T" use="optional" />
+		<xsd:attribute name="type" type="xsd:string" use="required" fixed="SV" />
+		<xsd:attribute name="encodingType" use="prohibited" />
+		<xsd:attribute name="keyReferenceType" use="optional" default="Identifier">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Identifier" />
+					<xsd:enumeration value="Embedded" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="Target_T">
+			<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="type" use="optional" default="qname">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="qname" />
+							<xsd:enumeration value="uri" />
+							<xsd:enumeration value="xpath" />
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="contentOnly" type="xsd:boolean" use="optional" default="true" />
+				<xsd:attribute name="enforce" type="xsd:boolean" use="optional" default="true" />
+								</xsd:extension>
+				</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="SignatureTarget_T">
+		<xsd:sequence minOccurs="0" maxOccurs="1">
+			<xsd:element name="DigestMethod" type="DigestMethod_T" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Transform" type="Transform_T" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="type" use="optional" default="qname">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="qname" />
+					<xsd:enumeration value="uri" />
+					<xsd:enumeration value="xpath" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="enforce" type="xsd:boolean" use="optional" default="true" />
+		<xsd:attribute name="value" type="xsd:string" use="optional" default="true" />
+	</xsd:complexType>
+	<xsd:complexType name="DigestMethod_T">
+		<xsd:attribute name="algorithm" type="xsd:string" use="optional" default="http://www.w3.org/2000/09/xmldsig#sha1" />
+	</xsd:complexType>
+	<xsd:complexType name="Transform_T">
+		<xsd:sequence>
+			<xsd:element name="AlgorithmParameter" type="AlgorithmParameter_T" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="algorithm" type="xsd:string" use="required" />
+                <xsd:attribute name="disableInclusivePrefix" type="xsd:boolean" use="optional" default="false" />
+	</xsd:complexType>
+	<xsd:complexType name="AlgorithmParameter_T">
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="value" type="xsd:string" use="required" />
+	</xsd:complexType>
+	<xsd:simpleType name="id_T">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
